@@ -15,8 +15,13 @@ const forecast = (latitude, longitude, callback) => {
                 callback("Unable to get weather data.", undefined)
             } else {
                 const { timezone, daily, currently } = body
-                const time = new Date(currently.time).toLocaleTimeString('en-GB', { timeZone: timezone })
-                const message = `${time} ${daily.data[0].summary}. It is currently ${currently.temperature} degrees out. There is ${currently.precipProbability * 100}% chance of rain.`
+                const time = new Date(daily.data[0].time).toTimeString()
+                const timeHi = new Date(daily.data[0].temperatureHighTime).toLocaleTimeString('en-GB', { timeZone: timezone })
+                const timeLo = new Date(daily.data[0].temperatureLowTime).toLocaleTimeString('en-GB', { timeZone: timezone })
+                let message = `${daily.data[0].summary}.`
+                message += ` It is currently ${currently.temperature}C°.`
+                message += ` There is ${currently.precipProbability * 100}% chance of rain.`
+                message += ` Temperature high of ${daily.data[0].temperatureHigh}C° and low of ${daily.data[0].temperatureLow}C°.`
                 callback(undefined, message)
             }
         })
